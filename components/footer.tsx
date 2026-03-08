@@ -4,7 +4,7 @@ import { useEffect, useState } from "react"
 import Link from "next/link"
 import Image from "next/image"
 import { Phone, Mail, MapPin, MessageCircle } from "lucide-react"
-import { PHONE_NUMBER, EMAIL, ADDRESS, WHATSAPP_NUMBER, WORKING_HOURS } from "@/lib/data"
+import { COMPANY_NAME, PHONE_NUMBERS, EMAIL, ADDRESS, WHATSAPP_NUMBER, WHATSAPP_CONTACTS, WORKING_HOURS } from "@/lib/data"
 import { parseApiResponse } from "@/lib/admin-api"
 import type { Category } from "@/lib/admin-types"
 
@@ -38,7 +38,7 @@ export function Footer() {
             <Link href="/" className="mb-4 inline-flex items-center">
               <Image
                 src="/Amallogo.png"
-                alt="AMAL FURNISHERS PVT LTD"
+                alt={COMPANY_NAME}
                 width={180}
                 height={56}
                 className="h-12 w-auto"
@@ -102,24 +102,52 @@ export function Footer() {
             <ul className="space-y-3">
               <li className="flex items-start gap-2">
                 <Phone className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
-                <span className="text-sm text-secondary-foreground/70">{PHONE_NUMBER}</span>
+                <div className="space-y-1">
+                  {PHONE_NUMBERS.map((phone) => (
+                    <a
+                      key={phone.href}
+                      href={`tel:${phone.href}`}
+                      className="block text-sm text-secondary-foreground/70 transition-colors hover:text-primary"
+                    >
+                      {phone.display}
+                    </a>
+                  ))}
+                </div>
               </li>
               <li className="flex items-start gap-2">
-                <Mail className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
-                <span className="text-sm text-secondary-foreground/70">{EMAIL}</span>
+                <MessageCircle className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
+                <div className="space-y-1">
+                  {WHATSAPP_CONTACTS.map((contact) => (
+                    <a
+                      key={contact.href}
+                      href={`https://wa.me/${contact.href}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="block text-sm text-secondary-foreground/70 transition-colors hover:text-primary"
+                    >
+                      {contact.display}
+                    </a>
+                  ))}
+                </div>
               </li>
+              {EMAIL ? (
+                <li className="flex items-start gap-2">
+                  <Mail className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
+                  <span className="text-sm text-secondary-foreground/70">{EMAIL}</span>
+                </li>
+              ) : null}
               <li className="flex items-start gap-2">
                 <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
                 <span className="text-sm text-secondary-foreground/70">{ADDRESS}</span>
               </li>
             </ul>
-            <p className="mt-4 text-xs text-secondary-foreground/50">{WORKING_HOURS}</p>
+            {WORKING_HOURS ? <p className="mt-4 text-xs text-secondary-foreground/50">{WORKING_HOURS}</p> : null}
           </div>
         </div>
 
         <div className="mt-12 border-t border-secondary-foreground/10 pt-8 text-center">
           <p className="text-sm text-secondary-foreground/50">
-            &copy; {new Date().getFullYear()} AMAL FURNISHERS PVT LTD. All rights reserved.
+            &copy; {new Date().getFullYear()} {COMPANY_NAME}. All rights reserved.
           </p>
         </div>
       </div>

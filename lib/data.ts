@@ -1,8 +1,18 @@
-export const WHATSAPP_NUMBER = "94719201718"
-export const PHONE_NUMBER = "+1 (234) 567-890"
-export const EMAIL = "info@luxecraft.com"
-export const ADDRESS = "123 Artisan Boulevard, Design District, NY 10001"
-export const WORKING_HOURS = "Mon - Sat: 9:00 AM - 7:00 PM | Sun: 10:00 AM - 5:00 PM"
+export const COMPANY_NAME = "Amal Furnishers Pvt Ltd"
+export const PHONE_NUMBERS = [
+  { label: "Mobile", display: "+94 777 689 985", href: "+94777689985" },
+  { label: "Landline 1", display: "011 265 4646", href: "0112654646" },
+  { label: "Landline 2", display: "011 265 4848", href: "0112654848" },
+] as const
+export const WHATSAPP_CONTACTS = [
+  { label: "WhatsApp 1", display: "+94 76 817 3877", href: "94768173877" },
+  { label: "WhatsApp 2", display: "+94 76 817 3875", href: "94768173875" },
+] as const
+export const WHATSAPP_NUMBER = WHATSAPP_CONTACTS[0].href
+export const PHONE_NUMBER = PHONE_NUMBERS[0].display
+export const EMAIL = ""
+export const ADDRESS = "150 De Soysa Road, Moratumulla, Moratuwa, Sri Lanka 10400"
+export const WORKING_HOURS = ""
 
 export interface CategoryGroup {
   id: string

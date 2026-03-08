@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import { Phone, Mail, MapPin, MessageCircle, Clock, Send } from "lucide-react"
-import { PHONE_NUMBER, EMAIL, ADDRESS, WHATSAPP_NUMBER, WORKING_HOURS } from "@/lib/data"
+import { COMPANY_NAME, PHONE_NUMBERS, EMAIL, ADDRESS, WHATSAPP_NUMBER, WHATSAPP_CONTACTS, WORKING_HOURS } from "@/lib/data"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -16,6 +16,15 @@ import {
 } from "@/components/ui/select"
 
 const inquiryTypes = ["Personal", "Corporate", "Industry"]
+
+type ContactCard = {
+  icon: typeof Phone
+  label: string
+  values: Array<{
+    text: string
+    href?: string
+  }>
+}
 
 export default function ContactPage() {
   const [formData, setFormData] = useState({
@@ -33,6 +42,45 @@ export default function ContactPage() {
     const encoded = encodeURIComponent(message)
     window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encoded}`, "_blank")
   }
+
+  const contactCards: ContactCard[] = [
+    {
+      icon: Phone,
+      label: "Call Us",
+      values: PHONE_NUMBERS.map((phone) => ({ text: phone.display, href: `tel:${phone.href}` })),
+    },
+    {
+      icon: MessageCircle,
+      label: "WhatsApp",
+      values: WHATSAPP_CONTACTS.map((contact) => ({
+        text: contact.display,
+        href: `https://wa.me/${contact.href}`,
+      })),
+    },
+    ...(EMAIL
+      ? [
+          {
+            icon: Mail,
+            label: "Email",
+            values: [{ text: EMAIL, href: `mailto:${EMAIL}` }],
+          },
+        ]
+      : []),
+    {
+      icon: MapPin,
+      label: "Address",
+      values: [{ text: ADDRESS }],
+    },
+    ...(WORKING_HOURS
+      ? [
+          {
+            icon: Clock,
+            label: "Working Hours",
+            values: [{ text: WORKING_HOURS }],
+          },
+        ]
+      : []),
+  ]
 
   return (
     <main>
@@ -52,29 +100,31 @@ export default function ContactPage() {
       {/* Contact Info Cards */}
       <section className="mx-auto max-w-7xl px-4 py-16">
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          {[
-            { icon: Phone, label: "Phone", value: PHONE_NUMBER, href: `tel:${PHONE_NUMBER.replace(/\D/g, "")}` },
-            { icon: MessageCircle, label: "WhatsApp", value: "Chat with us", href: `https://wa.me/${WHATSAPP_NUMBER}` },
-            { icon: Mail, label: "Email", value: EMAIL, href: `mailto:${EMAIL}` },
-            { icon: Clock, label: "Working Hours", value: WORKING_HOURS, href: undefined },
-          ].map((item) => (
+          {contactCards.map((item) => (
             <div key={item.label} className="rounded-xl border border-border bg-card p-6 text-center">
               <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
                 <item.icon className="h-5 w-5 text-primary" />
               </div>
               <h3 className="mt-4 text-sm font-semibold text-foreground">{item.label}</h3>
-              {item.href ? (
-                <a
-                  href={item.href}
-                  target={item.href.startsWith("http") ? "_blank" : undefined}
-                  rel={item.href.startsWith("http") ? "noopener noreferrer" : undefined}
-                  className="mt-1 block text-sm text-primary hover:underline"
-                >
-                  {item.value}
-                </a>
-              ) : (
-                <p className="mt-1 text-xs text-muted-foreground">{item.value}</p>
-              )}
+              <div className="mt-3 space-y-2">
+                {item.values.map((value) =>
+                  value.href ? (
+                    <a
+                      key={value.href}
+                      href={value.href}
+                      target={value.href.startsWith("http") ? "_blank" : undefined}
+                      rel={value.href.startsWith("http") ? "noopener noreferrer" : undefined}
+                      className="block text-sm text-primary hover:underline"
+                    >
+                      {value.text}
+                    </a>
+                  ) : (
+                    <p key={value.text} className="text-sm text-muted-foreground">
+                      {value.text}
+                    </p>
+                  ),
+                )}
+              </div>
             </div>
           ))}
         </div>
@@ -153,14 +203,14 @@ export default function ContactPage() {
 
               <div className="mt-6 overflow-hidden rounded-xl border border-border">
                 <iframe
-                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3024.2219901290355!2d-74.00369368400567!3d40.71312937933185!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c25a23e28c1191%3A0x49f75d3281df052a!2s150%20Park%20Row%2C%20New%20York%2C%20NY%2010007!5e0!3m2!1sen!2sus!4v1640000000000!5m2!1sen!2sus"
+                  src={`https://www.google.com/maps?q=${encodeURIComponent(ADDRESS)}&output=embed`}
                   width="100%"
                   height="350"
                   style={{ border: 0 }}
                   allowFullScreen
                   loading="lazy"
                   referrerPolicy="no-referrer-when-downgrade"
-                  title="LuxeCraft showroom location"
+                  title={`${COMPANY_NAME} location`}
                 />
               </div>
 
@@ -168,9 +218,9 @@ export default function ContactPage() {
                 <div className="flex items-start gap-3">
                   <MapPin className="mt-0.5 h-5 w-5 shrink-0 text-primary" />
                   <div>
-                    <h3 className="font-semibold text-foreground">LuxeCraft Showroom</h3>
+                    <h3 className="font-semibold text-foreground">{COMPANY_NAME}</h3>
                     <p className="mt-1 text-sm text-muted-foreground">{ADDRESS}</p>
-                    <p className="mt-2 text-xs text-muted-foreground">{WORKING_HOURS}</p>
+                    {WORKING_HOURS ? <p className="mt-2 text-xs text-muted-foreground">{WORKING_HOURS}</p> : null}
                   </div>
                 </div>
               </div>

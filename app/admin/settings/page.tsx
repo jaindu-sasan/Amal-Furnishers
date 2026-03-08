@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import { Save, Building2, Phone, Mail, MapPin, Clock, MessageCircle } from "lucide-react"
-import { PHONE_NUMBER, EMAIL, ADDRESS, WHATSAPP_NUMBER, WORKING_HOURS } from "@/lib/data"
+import { COMPANY_NAME, PHONE_NUMBERS, EMAIL, ADDRESS, WHATSAPP_CONTACTS, WORKING_HOURS } from "@/lib/data"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -11,15 +11,15 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 
 export default function AdminSettingsPage() {
   const [settings, setSettings] = useState({
-    companyName: "LuxeCraft Furniture",
-    tagline: "Handcrafted Premium Furniture",
-    phone: PHONE_NUMBER,
-    whatsapp: WHATSAPP_NUMBER,
+    companyName: COMPANY_NAME,
+    tagline: "Custom furniture solutions for homes, offices, and commercial spaces",
+    phone: PHONE_NUMBERS.map((phone) => phone.display).join(" / "),
+    whatsapp: WHATSAPP_CONTACTS.map((contact) => contact.display).join(" / "),
     email: EMAIL,
     address: ADDRESS,
     workingHours: WORKING_HOURS,
-    seoTitle: "LuxeCraft - Premium Handcrafted Furniture",
-    seoDescription: "Discover handcrafted luxury furniture for your home and business. Custom designs, premium materials, and expert craftsmanship.",
+    seoTitle: `${COMPANY_NAME} | Furniture in Moratuwa`,
+    seoDescription: "Amal Furnishers Pvt Ltd offers furniture solutions for homes, offices, and commercial spaces in Moratuwa, Sri Lanka.",
   })
 
   const handleSave = () => {

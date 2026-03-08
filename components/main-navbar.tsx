@@ -7,6 +7,7 @@ import { Menu, X, ChevronDown } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { parseApiResponse } from "@/lib/admin-api"
 import type { Category, Product } from "@/lib/admin-types"
+import { COMPANY_NAME } from "@/lib/data"
 
 type CategoryListResponse = {
   data: Category[]
@@ -90,14 +91,14 @@ export function MainNavbar() {
           <Link href="/" className="flex items-center gap-3 flex-shrink-0">
             <Image
               src="/Amallogo.png"
-              alt="AMAL FURNISHERS PVT LTD"
+              alt={COMPANY_NAME}
               width={180}
               height={56}
               className="h-10 md:h-11 w-auto"
               priority
             />
-            <span className="hidden xl:block text-xs font-bold tracking-wide text-foreground">
-              AMAL FURNISHERS PVT LTD
+            <span className="hidden xl:block text-xs font-bold uppercase tracking-wide text-foreground">
+              {COMPANY_NAME}
             </span>
           </Link>
 
