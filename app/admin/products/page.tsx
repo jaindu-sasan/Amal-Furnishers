@@ -159,7 +159,7 @@ export default function AdminProductsPage() {
                     <TableCell className="font-medium">{product.name}</TableCell>
                     <TableCell>{product.productCode}</TableCell>
                     <TableCell>{product.category?.name ?? "-"}</TableCell>
-                    <TableCell>${product.price.toLocaleString()}</TableCell>
+                    <TableCell>LKR{product.price.toLocaleString()}</TableCell>
                     <TableCell>
                       <StatusBadge type="product" value={product.stockStatus} />
                     </TableCell>

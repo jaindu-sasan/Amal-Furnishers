@@ -165,7 +165,7 @@ export default function ProductsPage() {
 
       <div>
         <label className="mb-2 block text-sm font-medium text-foreground">
-          Price Range: LKR{priceRange[0].toLocaleString()} - ${priceRange[1].toLocaleString()}
+          Price Range: LKR{priceRange[0].toLocaleString()} - LKR{priceRange[1].toLocaleString()}
         </label>
         <Slider
           value={priceRange}
@@ -271,7 +271,7 @@ export default function ProductsPage() {
                     <h3 className="mb-1 font-medium text-card-foreground group-hover:text-primary">{product.name}</h3>
                     <p className="mb-3 text-xs leading-relaxed text-muted-foreground line-clamp-2">{product.shortDescription}</p>
                     <div className="flex items-center justify-between">
-                      <span className="text-lg font-bold text-primary">${product.price.toLocaleString()}</span>
+                      <span className="text-lg font-bold text-primary">LKR{product.price.toLocaleString()}</span>
                       <span className="text-xs text-muted-foreground">{product.category?.name || "Uncategorized"}</span>
                     </div>
                   </div>

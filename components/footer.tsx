@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react"
 import Link from "next/link"
+import Image from "next/image"
 import { Phone, Mail, MapPin, MessageCircle } from "lucide-react"
 import { PHONE_NUMBER, EMAIL, ADDRESS, WHATSAPP_NUMBER, WORKING_HOURS } from "@/lib/data"
 import { parseApiResponse } from "@/lib/admin-api"
@@ -34,14 +35,17 @@ export function Footer() {
         <div className="grid gap-12 md:grid-cols-2 lg:grid-cols-4">
           {/* Brand */}
           <div>
-            <div className="mb-4 flex items-center gap-2">
-              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary">
-                <span className="font-serif text-lg font-bold text-primary-foreground">L</span>
-              </div>
-              <span className="font-serif text-xl font-bold text-secondary-foreground">LuxeCraft</span>
-            </div>
+            <Link href="/" className="mb-4 inline-flex items-center">
+              <Image
+                src="/Amallogo.png"
+                alt="AMAL FURNISHERS PVT LTD"
+                width={180}
+                height={56}
+                className="h-12 w-auto"
+              />
+            </Link>
             <p className="mb-6 text-sm leading-relaxed text-secondary-foreground/70">
-              Handcrafted premium furniture for discerning homes and businesses. Every piece tells a story of master craftsmanship.
+              Custom furniture solutions for homes, offices, and commercial spaces with a focus on quality craftsmanship and long-lasting design.
             </p>
             <a
               href={`https://wa.me/${WHATSAPP_NUMBER}`}
@@ -115,7 +119,7 @@ export function Footer() {
 
         <div className="mt-12 border-t border-secondary-foreground/10 pt-8 text-center">
           <p className="text-sm text-secondary-foreground/50">
-            &copy; {new Date().getFullYear()} LuxeCraft Furniture. All rights reserved.
+            &copy; {new Date().getFullYear()} AMAL FURNISHERS PVT LTD. All rights reserved.
           </p>
         </div>
       </div>
