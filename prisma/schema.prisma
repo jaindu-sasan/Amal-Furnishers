@@ -7,6 +7,72 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model AdminUser {
+  id           String   @id @default(cuid())
+  email        String   @unique(map: "AdminUser_email_key")
+  passwordHash String
+  name         String?
+  isActive     Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@index([isActive], map: "AdminUser_isActive_idx")
+  @@map("adminuser")
+}
+
+model Category {
+  id        String         @id @default(cuid())
+  name      String
+  slug      String         @unique(map: "Category_slug_key")
+  status    CategoryStatus @default(ACTIVE)
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @updatedAt
+  products  Product[]
+
+  @@index([name], map: "Category_name_idx")
+  @@index([status], map: "Category_status_idx")
+  @@map("category")
+}
+
+model Product {
+  id               String      @id @default(cuid())
+  name             String
+  categoryId       String
+  productCode      String      @unique(map: "Product_productCode_key")
+  price            Decimal     @db.Decimal(10, 2)
+  stockStatus      StockStatus
+  shortDescription String      @db.VarChar(300)
+  fullDescription  String      @db.Text
+  imageUrl         String?
+  createdAt        DateTime    @default(now())
+  updatedAt        DateTime    @updatedAt
+  messages         Message[]
+  category         Category    @relation(fields: [categoryId], references: [id], map: "Product_categoryId_fkey")
+
+  @@index([categoryId], map: "Product_categoryId_idx")
+  @@index([name], map: "Product_name_idx")
+  @@index([stockStatus], map: "Product_stockStatus_idx")
+  @@map("product")
+}
+
+model Message {
+  id           String        @id @default(cuid())
+  customerName String
+  phone        String
+  email        String
+  message      String        @db.Text
+  productId    String?
+  status       MessageStatus @default(UNREAD)
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  product      Product?      @relation(fields: [productId], references: [id], map: "Message_productId_fkey")
+
+  @@index([email], map: "Message_email_idx")
+  @@index([productId], map: "Message_productId_idx")
+  @@index([status, createdAt], map: "Message_status_createdAt_idx")
+  @@map("message")
+}
+
 enum CategoryStatus {
   ACTIVE
   INACTIVE
@@ -21,70 +87,4 @@ enum StockStatus {
 enum MessageStatus {
   READ
   UNREAD
-}
-
-model AdminUser {
-  id           String   @id @default(cuid())
-  email        String   @unique
-  passwordHash String
-  name         String?
-  isActive     Boolean  @default(true)
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
-
-  @@index([isActive])
-  @@map("adminuser")
-}
-
-model Category {
-  id        String         @id @default(cuid())
-  name      String
-  slug      String         @unique
-  status    CategoryStatus @default(ACTIVE)
-  products  Product[]
-  createdAt DateTime       @default(now())
-  updatedAt DateTime       @updatedAt
-
-  @@index([status])
-  @@index([name])
-  @@map("category")
-}
-
-model Product {
-  id               String      @id @default(cuid())
-  name             String
-  categoryId       String
-  category         Category    @relation(fields: [categoryId], references: [id], onDelete: Restrict)
-  productCode      String      @unique
-  price            Decimal     @db.Decimal(10, 2)
-  stockStatus      StockStatus
-  shortDescription String      @db.VarChar(300)
-  fullDescription  String      @db.Text
-  imageUrl         String?
-  messages         Message[]
-  createdAt        DateTime    @default(now())
-  updatedAt        DateTime    @updatedAt
-
-  @@index([categoryId])
-  @@index([name])
-  @@index([stockStatus])
-  @@map("product")
-}
-
-model Message {
-  id           String        @id @default(cuid())
-  customerName String
-  phone        String
-  email        String
-  message      String        @db.Text
-  productId    String?
-  product      Product?      @relation(fields: [productId], references: [id], onDelete: SetNull)
-  status       MessageStatus @default(UNREAD)
-  createdAt    DateTime      @default(now())
-  updatedAt    DateTime      @updatedAt
-
-  @@index([status, createdAt])
-  @@index([productId])
-  @@index([email])
-  @@map("message")
 }
