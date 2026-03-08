@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useMemo, useState } from "react"
+import { Suspense, useEffect, useMemo, useState } from "react"
 import { useSearchParams } from "next/navigation"
 import Image from "next/image"
 import Link from "next/link"
@@ -30,6 +30,14 @@ function formatStock(stockStatus: Product["stockStatus"]) {
 }
 
 export default function ProductsPage() {
+  return (
+    <Suspense fallback={<ProductsPageFallback />}>
+      <ProductsPageContent />
+    </Suspense>
+  )
+}
+
+function ProductsPageContent() {
   const searchParams = useSearchParams()
   const initialCategory = searchParams.get("category") || ""
   const initialSearch = searchParams.get("search") || ""
@@ -297,6 +305,17 @@ export default function ProductsPage() {
           </div>
         </div>
       )}
+    </div>
+  )
+}
+
+function ProductsPageFallback() {
+  return (
+    <div className="mx-auto max-w-7xl px-4 py-8">
+      <div className="mb-8">
+        <h1 className="font-serif text-3xl font-bold text-foreground md:text-4xl">Our Products</h1>
+        <p className="mt-2 text-muted-foreground">Loading products...</p>
+      </div>
     </div>
   )
 }

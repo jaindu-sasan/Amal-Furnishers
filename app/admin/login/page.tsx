@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { Suspense, useEffect, useState } from "react"
 import type { FormEvent } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import { toast } from "sonner"
@@ -20,6 +20,14 @@ type LoginResponse = {
 }
 
 export default function AdminLoginPage() {
+  return (
+    <Suspense fallback={<AdminLoginFallback />}>
+      <AdminLoginPageContent />
+    </Suspense>
+  )
+}
+
+function AdminLoginPageContent() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const nextPath = searchParams.get("next") || "/admin/dashboard"
@@ -108,6 +116,19 @@ export default function AdminLoginPage() {
             </Button>
           </form>
         </CardContent>
+      </Card>
+    </div>
+  )
+}
+
+function AdminLoginFallback() {
+  return (
+    <div className="flex min-h-screen items-center justify-center bg-muted/30 p-4">
+      <Card className="w-full max-w-md">
+        <CardHeader>
+          <CardTitle>Admin Login</CardTitle>
+          <CardDescription>Loading sign in form...</CardDescription>
+        </CardHeader>
       </Card>
     </div>
   )
