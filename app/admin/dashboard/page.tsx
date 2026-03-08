@@ -14,6 +14,8 @@ import {
 import { AdminPageHeader } from "@/components/admin/page-header"
 import { StatusBadge } from "@/components/admin/status-badge"
 
+export const dynamic = "force-dynamic"
+
 export default async function AdminDashboardPage() {
   const [categoryCount, productCount, totalMessages, unreadMessages, recentMessages] = await Promise.all([
     prisma.category.count(),
